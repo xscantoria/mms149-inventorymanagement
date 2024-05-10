@@ -1,2 +1,9 @@
-# requirements.txt
-Django==2.2.4
+﻿asgiref==3.7.2
+Django==4.2.4
+django-environ==0.10.0
+django-js-asset==2.1.0
+Markdown==3.4.4
+psycopg2-binary==2.9.6
+sqlparse==0.4.4
+tzdata==2023.3
+whitenoise==6.5.0
