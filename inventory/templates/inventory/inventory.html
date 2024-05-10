@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Inventory</title>
+<style>
+    nav {
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+    }
+    
+    nav a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+    .content {
+        padding: 20px;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .content {
+            padding: 10px;
+        }
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+    th {
+        background-color: #017F8D;
+        color: #ffffff;
+        text-align: center;
+    }
+    button {
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    button.add-btn {
+        background-color: #017F8D;
+        color: #fff;
+    }
+    button.edit-btn {
+        background-color: #017F8D;
+        color: #fff;
+    }
+    button.delete-btn {
+        background-color: #DB3838;
+        color: #fff;
+    }
+    h1 {
+        color: #017F8D;
+    }
+</style>
+</head>
+<body>
+
+{% include "partials/nav.html" %}
+
+<div class="content">
+    <h1>Inventory</h1>
+
+    <form id="inventoryForm">
+        <input type="text" name="name" placeholder="Name">
+        <input type="text" name="transaction_type" placeholder="Transaction Type">
+        <input type="number" name="transaction_quantity" placeholder="Transaction Quantity">
+        <input type="date" name="transaction_date" placeholder="Transaction Date">
+        <button type="submit" class="add-btn">Add</button>
+    </form>
+
+    <table id="inventoryTable">
+        <tr>
+            <th>Name</th>
+            <th>Transaction Type</th>
+            <th>Transaction Quantity</th>
+            <th>Transaction Date</th>
+            <th>Actions</th>
+        </tr>
+    </table>
+</div>
+
+<script>
+document.getElementById("inventoryForm").addEventListener("submit", function(event) {
+    event.preventDefault();
+    var formData = new FormData(this);
+    var table = document.getElementById("inventoryTable");
+    var newRow = table.insertRow(-1);
+    var cellIndex = 0;
+    formData.forEach(function(value) {
+        var cell = newRow.insertCell(cellIndex++);
+        cell.textContent = value;
+    });
+    var actionCell = newRow.insertCell(cellIndex);
+    var editButton = document.createElement("button");
+    editButton.textContent = "Edit";
+    editButton.className = "edit-btn";
+    editButton.onclick = function() {
+        var cells = newRow.cells;
+        for (var i = 0; i < cells.length - 1; i++) {
+            var input = document.createElement("input");
+            input.value = cells[i].textContent;
+            cells[i].textContent = '';
+            cells[i].appendChild(input);
+        }
+        editButton.textContent = "Save";
+        editButton.onclick = function() {
+            for (var i = 0; i < cells.length - 1; i++) {
+                cells[i].textContent = cells[i].querySelector("input").value;
+            }
+            editButton.textContent = "Edit";
+            editButton.onclick = function() {
+                // Restore previous editing state
+                for (var i = 0; i < cells.length - 1; i++) {
+                    var input = document.createElement("input");
+                    input.value = cells[i].textContent;
+                    cells[i].textContent = '';
+                    cells[i].appendChild(input);
+                }
+                editButton.textContent = "Save";
+                editButton.onclick = function() {
+                    // Save edited content
+                    for (var i = 0; i < cells.length - 1; i++) {
+                        cells[i].textContent = cells[i].querySelector("input").value;
+                    }
+                    editButton.textContent = "Edit";
+                    editButton.onclick = function() {
+                        // Call edit function again
+                        editContent();
+                    };
+                };
+            };
+        };
+    };
+    actionCell.appendChild(editButton);
+
+    var deleteButton = document.createElement("button");
+    deleteButton.textContent = "Delete";
+    deleteButton.className = "delete-btn";
+    deleteButton.onclick = function() {
+        table.deleteRow(newRow.rowIndex);
+    };
+    actionCell.appendChild(deleteButton);
+
+    this.reset();
+});
+
+function editContent() {
+    // Edit function
+}
+
+</script>
+
+</body>
+</html>

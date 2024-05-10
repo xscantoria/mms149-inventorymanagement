@@ -1,0 +1,14 @@
+{% extends "partials/base.html" %}
+
+{% block title %}
+Home
+{% endblock %}
+
+{% block content %}
+<div class="content" id="content">
+    <h1>SIA PRINTING SERVICES</h1>
+    <p>Inventory Management System.</p>
+    <p>Get started by <a href="{% url 'service_list' %}">viewing the services</a>.</p>
+    <p>Get started by <a href="{% url 'place_order' %}">viewing the orders</a>.</p>
+</div>
+{% endblock %}

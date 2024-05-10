@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Management System</title>
+    <link rel="icon" href="{% static 'images/logo.png' %}">
+    <link rel="stylesheet" href="{% static 'style.css' %}" />
+   
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+
+        img {
+          width: 100%;
+        }
+
+        /* Style for the sidebar */
+        .sidebar {
+            height: 100%;
+            width: 200px;
+            position: fixed;
+            left: 0;
+            top: 0;
+            background-color: rgb(1, 127, 141);
+            padding-top: 20px;
+            transition: width 0.5s;
+        }
+
+        /* Style for sidebar links */
+        .sidebar a {
+            position: relative;
+            top: 50px;
+            padding: 10px;
+            text-decoration: none;
+            font-size: 18px;
+            color: white;
+            display: flex; /* Added */
+            align-items: center; /* Added */
+        }
+
+        /* Change color on hover */
+        .sidebar a:hover {
+            background-color: #444;
+        }
+
+        /* Style for the content */
+        .content {
+            margin-left: 200px; /* Same as the width of the sidebar */
+            transition: margin-left 0.5s;
+            padding: 20px;
+        }
+
+        /* Style for the toggle button */
+        .toggle-btn {
+            position: absolute;
+            left: 10px;
+            top: 10px;
+            cursor: pointer;
+            color: white;
+            font-size: 24px;
+        }
+
+        /* Style for the icon */
+        .sidebar .icon {
+            margin-right: 10px;
+            
+        }
+
+        /* Hide text when sidebar is col  lapsed */
+        .sidebar.collapsed a span.text {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    
+    
+
+<div class="sidebar" id="sidebar">
+    <span class="toggle-btn" id="toggle-btn">&#9668;</span>
+
+    <a href="{% url 'home' %}">
+        <img style="float: left; padding: 0px 10px 0px 0px;" src="{% static 'images/logos.png' %}" alt = "";/>
+        <span class="text"><h4>SIA PRINTING SERVICES</h4></span>
+    </a>
+
+    <a href="{% url 'home' %}">
+        <i class="icon fas fa-tachometer-alt"></i> <!-- Dashboard Icon -->
+        <span class="text">Dashboard</span>
+    </a>
+    <a href="{% url 'service_list' %}">
+        <i class="icon fas fa-print"></i> <!-- Printer Icon for Services -->
+        <span class="text">Services</span>
+    </a>
+    <a href="{% url 'clients' %}">
+        <i class="icon fas fa-users"></i> <!-- Icon for Clients -->
+        <span class="text">Clients</span>
+    </a>
+    <a href="{% url 'suppliers' %}">
+        <i class="icon fas fa-truck"></i> <!-- Icon for Suppliers -->
+        <span class="text">Suppliers</span>
+    </a>
+    <a href="{% url 'materials' %}">
+        <i class="icon fas fa-box"></i> <!-- Icon for Materials -->
+        <span class="text">Materials</span>
+    </a>
+    <a href="{% url 'place_order' %}">
+        <i class="icon fas fa-shopping-cart"></i> <!-- Icon for Orders -->
+        <span class="text">Orders</span>
+    </a>
+    <a href="{% url 'inventory' %}">
+        <i class="icon fas fa-warehouse"></i> <!-- Icon for Inventory -->
+        <span class="text">Inventory</span>
+    </a>
+   
+
+
+
+    {% if user.is_authenticated %}
+
+    <a href="{% url 'logout' %}" style="text-align: center; top:180px;">
+        
+        <span class="text" >Log Out</span>
+        
+    </a>
+    {% else %}
+    <a href="{% url 'user-register' %}" style="text-align: center; top:150px;">
+        
+        <span class="text" >Register</span>
+        
+    </a>
+    <a href="{% url 'login' %}" style="text-align: center; top:140px;">
+        
+        <span class="text" >Login</span>
+        
+    </a>
+    {% endif %}
+
+      
+ 
+</div>
+
+
+
+<script>
+   // Toggle function
+   document.getElementById("toggle-btn").addEventListener("click", function() {
+        var sidebar = document.getElementById("sidebar");
+        var content = document.getElementById("content");
+        if (sidebar.style.width === "200px") {
+            sidebar.style.width = "50px";
+            content.style.marginLeft = "50px";
+            sidebar.classList.add("collapsed");
+            this.innerHTML = "&#9654;"; // Change arrow to point right when collapsed
+        } else {
+            sidebar.style.width = "200px";
+            content.style.marginLeft = "200px";
+            sidebar.classList.remove("collapsed");
+            this.innerHTML = "&#9668;"; // Change arrow to point left when expanded
+            ;
+        }
+    });
+</script>
+
+</body>
+</html>

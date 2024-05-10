@@ -1,0 +1,11 @@
+{% includes 'partials/base.html' %}
+{% load i18n %} 
+{% load cms_tags sekizai_tags %}
+{% block content %}
+<h1>Place Order</h1>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Submit Order</button>
+</form>
+{% endblock %}

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Materials</title>
+<style>
+    nav {
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+        text-align: center;
+    }
+    
+    nav a {
+        color: #fff;
+        text-decoration: none;
+        margin: 0 10px;
+    }
+    .content {
+        padding: 20px;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .content {
+            padding: 10px;
+        }
+    }
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: left;
+        padding: 8px;
+    }
+    th {
+        background-color: #017F8D;
+        color: #ffffff;
+        text-align: center;
+    }
+    button {
+        border: none;
+        padding: 8px 12px;
+        cursor: pointer;
+        border-radius: 4px;
+    }
+    button.add-btn {
+        background-color: #017F8D;
+        color: #fff;
+    }
+    button.edit-btn {
+        background-color: #017F8D;
+        color: #fff;
+    }
+    button.delete-btn {
+        background-color: #DB3838;
+        color: #fff;
+    }
+    h1 {
+        color: #017F8D;
+    }
+</style>
+</head>
+<body>
+
+    {% include "partials/base.html" %}
+
+    <div class="content">
+        <h1>Materials</h1>
+    
+        <form id="materialForm">
+            <input type="text" id="name" name="name" placeholder="Name">
+            <input type="number" id="initial_quantity" name="initial_quantity" placeholder="Initial Quantity">
+            <div class="input-group">
+                <span class="input-group-addon">₱</span>
+                <input type="text" id="price" name="price" placeholder="Price">
+            </div>
+            <button type="submit" class="add-btn">Add</button>
+        </form>
+    
+        <table id="materialTable">
+            <tr>
+                <th>Name</th>
+                <th>Initial Quantity</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </table>
+    </div>
+    
+    <script>
+    document.getElementById("materialForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        var formData = new FormData(this);
+        var table = document.getElementById("materialTable");
+        var newRow = table.insertRow(-1);
+        
+        formData.forEach(function(value, key) {
+            var cell = newRow.insertCell();
+            if (key === "price") {
+                value = "₱" + value; // Prepend peso sign to price value
+            }
+            cell.textContent = value;
+        });
+        
+        addEditDeleteButtons(newRow); // Add edit and delete buttons
+        this.reset(); // Reset the form
+    });
+    
+    function addEditDeleteButtons(row) {
+        var actionCell = row.insertCell();
+        
+        var editButton = createButton("Edit", "edit-btn", function() {
+            toggleEdit(row);
+        });
+        actionCell.appendChild(editButton);
+        
+        var deleteButton = createButton("Delete", "delete-btn", function() {
+            row.remove(); // Delete the row
+        });
+        actionCell.appendChild(deleteButton);
+    }
+    
+    function toggleEdit(row) {
+        var cells = row.cells;
+        var editButton = row.querySelector(".edit-btn");
+        
+        if (editButton.textContent === "Edit") {
+            for (var i = 0; i < cells.length - 1; i++) {
+                var input = document.createElement("input");
+                input.value = cells[i].textContent.trim();
+                if (i === 1) {
+                    input.type = "number"; // Set input type to number for initial quantity
+                }
+                cells[i].textContent = '';
+                cells[i].appendChild(input);
+            }
+            editButton.textContent = "Save";
+        } else {
+            for (var i = 0; i < cells.length - 1; i++) {
+                cells[i].textContent = cells[i].querySelector("input").value;
+            }
+            editButton.textContent = "Edit";
+        }
+    }
+    
+    function createButton(text, className, onClick) {
+        var button = document.createElement("button");
+        button.textContent = text;
+        button.className = className;
+        button.addEventListener("click", onClick);
+        return button;
+    }
+    </script>
+    
+    </body>
+    </html>
